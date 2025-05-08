@@ -1,5 +1,5 @@
 use clap::{Parser, Subcommand};
-use crate::commands::client;
+use crate::commands::client::types::ClientArgs;
 
 /// A CLI tool to help you use ssh client
 #[derive(Parser, Debug)]
@@ -12,5 +12,5 @@ pub struct Cli {
 #[derive(Subcommand, Debug)]
 pub enum Commands {
     /// Client commands
-    Client(client::ClientArgs),
+    Client(ClientArgs),
 }

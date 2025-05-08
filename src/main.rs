@@ -3,7 +3,7 @@ mod utils;
 mod types;
 
 use clap::Parser;
-use commands::client;
+use commands::client::{types::ClientCommands, tunnel as client_tunnel};
 use utils::configure_ssh;
 use types::{Cli, Commands};
 
@@ -22,14 +22,14 @@ fn main() {
     match cli.command {
         Commands::Client(client_args) => {
             match client_args.command {
-                client::ClientCommands::Tunnel {
+                ClientCommands::Tunnel {
                     tunnel_local_port,
                     tunnel_host,
                     tunnel_host_port,
                     tunnel_username,
                     tunnel_password,
                 } => {
-                    client::tunnel::run_tunnel(
+                    client_tunnel::run_tunnel(
                         tunnel_local_port,
                         tunnel_host,
                         tunnel_host_port,
