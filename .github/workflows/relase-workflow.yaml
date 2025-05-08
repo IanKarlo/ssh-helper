@@ -1,0 +1,46 @@
+name: Build and Release Workflow
+
+on:
+  push:
+    tags:
+      - v*
+
+jobs:
+  build:
+    runs-on: {{ matrix.os }}
+    strategy:
+      matrix:
+        - os: ubuntu-latest
+          artifact_name: ssh-helper
+          asset_name: ssh-helper
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          profile: minimal
+          override: true
+
+      - name: Build
+        uses: actions-rs/cargo@v1
+        with:
+          command: build
+          args: --release
+
+      - name: Rename binary
+        shell: bash
+        run: |
+          if [ "${{ matrix.os }}" = "windows-latest" ]; then
+            cp target/release/${{ matrix.artifact_name }} ${{ matrix.asset_name }}
+          else
+            cp target/release/${{ matrix.artifact_name }} ${{ matrix.asset_name }}
+          fi
+
+      - name: Upload Release Asset
+        uses: softprops/action-gh-release@v1
+        with:
+          files: ${{ matrix.asset_name }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
