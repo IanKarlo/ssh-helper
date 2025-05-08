@@ -11,9 +11,10 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        - os: ubuntu-latest
-          artifact_name: ssh-helper
-          asset_name: ssh-helper
+        include:
+          - os: ubuntu-latest
+            artifact_name: ssh-helper
+            asset_name: ssh-helper
     steps:
       - uses: actions/checkout@v3
 
