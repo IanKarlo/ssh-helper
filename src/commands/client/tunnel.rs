@@ -37,7 +37,5 @@ pub fn run_tunnel(
     .output()
     .expect("Failed to run ssh command");
 
-    println!("output: {:?}", output);
-
     println!("Process exited with status: {}", output.status);
 }

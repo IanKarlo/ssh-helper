@@ -23,8 +23,6 @@ pub fn configure_ssh() {
         false
     };
 
-    println!("OS: {}", valid_os);
-
     if !ssh_is_installed {
         print!("SSH is not installed, do you want to install it? (Y/n): ");
         io::stdout().flush().unwrap();
