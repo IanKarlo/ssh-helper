@@ -8,25 +8,30 @@ pub struct ClientArgs {
 
 #[derive(Subcommand, Debug)]
 pub enum ClientCommands {
+    /// Starts a Tunnel to the server
     Tunnel {
-        /// Port number
+        /// Local Port number
         #[arg(short = 'l', long)]
-        tunnel_local_port: Option<u16>,
+        tunnel_local_port: u16,
 
-        /// Host name
+        /// Remote Host name
         #[arg(short = 't', long)]
-        tunnel_host: Option<String>,
+        tunnel_host: String,
 
-        /// Host port number
+        /// Remote Host port number
         #[arg(short = 'p', long)]
-        tunnel_host_port: Option<u16>,
+        tunnel_host_port: u16,
 
-        /// ssh username
+        /// Ssh connection username
         #[arg(short = 'u', long)]
-        tunnel_username: Option<String>,
+        tunnel_username: String,
 
-        /// ssh connection password
+        /// Ssh connection password
         #[arg(short = 'P', long)]
         tunnel_password: Option<String>,
+
+        /// Ssh connection key
+        #[arg(short = 'k', long)]
+        tunnel_key: Option<String>,
     },
 }

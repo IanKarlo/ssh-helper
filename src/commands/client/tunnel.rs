@@ -1,41 +1,56 @@
 use std::process::{Command, Stdio};
 
 pub fn run_tunnel(
-    local_port: Option<u16>,
-    host: Option<String>,
-    host_port: Option<u16>,
-    tunnel_username: Option<String>,
+    local_port: u16,
+    host: String,
+    host_port: u16,
+    tunnel_username: String,
     tunnel_password: Option<String>,
+    tunnel_key: Option<String>,
 ) {
-    if local_port.is_none()
-        || host.is_none()
-        || host_port.is_none()
-        || tunnel_username.is_none()
-        || tunnel_password.is_none()
+    if tunnel_password.is_none() && tunnel_key.is_none()
     {
         println!("You must provide all parameters to run the tunnel");
         return;
     }
 
-    let local_port = local_port.unwrap();
-    let host = host.unwrap();
-    let host_port = host_port.unwrap();
-    let tunnel_username = tunnel_username.unwrap();
-    let tunnel_password = tunnel_password.unwrap();
+    if tunnel_password.is_some() {
 
-    let output = Command::new("sshpass")
-    .arg("-p")
-    .arg(tunnel_password)
-    .arg("ssh")
-    .arg("-tt") 
-    .arg("-o StrictHostKeyChecking=no")
-    .arg("-R")
-    .arg(format!("{}:localhost:{}", host_port, local_port))
-    .arg(format!("{}@{}", tunnel_username, host))
-    .stdin(Stdio::null())  // você provavelmente não precisa do stdin piped aqui
-    .stderr(Stdio::piped())
-    .output()
-    .expect("Failed to run ssh command");
+        let pwsd = tunnel_password.unwrap();
 
-    println!("Process exited with status: {}", output.status);
+        let output = Command::new("sshpass")
+        .arg("-p")
+        .arg(pwsd)
+        .arg("ssh")
+        .arg("-tt") 
+        .arg("-o StrictHostKeyChecking=no")
+        .arg("-R")
+        .arg(format!("{}:localhost:{}", host_port, local_port))
+        .arg(format!("{}@{}", tunnel_username, host))
+        .stdin(Stdio::null()) 
+        .stderr(Stdio::piped())
+        .output()
+        .expect("Failed to run ssh command");
+
+        println!("Process exited with status: {}", output.status);
+    }
+
+
+    if let Some(key) = &tunnel_key {
+        let output = Command::new("ssh")
+            .arg("-tt")
+            .arg("-o StrictHostKeyChecking=no")
+            .arg("-R")
+            .arg(format!("{}:localhost:{}", host_port, local_port))
+            .arg(format!("{}@{}", tunnel_username, host))
+            .arg("-i")
+            .arg(key)
+            .stdin(Stdio::null())
+            .stderr(Stdio::piped())
+            .output()
+            .expect("Failed to run ssh command");
+
+        println!("Process exited with status: {}", output.status);
+    }
+    
 }

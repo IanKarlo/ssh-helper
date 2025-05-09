@@ -28,6 +28,7 @@ fn main() {
                     tunnel_host_port,
                     tunnel_username,
                     tunnel_password,
+                    tunnel_key,
                 } => {
                     client_tunnel::run_tunnel(
                         tunnel_local_port,
@@ -35,6 +36,7 @@ fn main() {
                         tunnel_host_port,
                         tunnel_username,
                         tunnel_password,
+                        tunnel_key,
                     );
                 }
             }
