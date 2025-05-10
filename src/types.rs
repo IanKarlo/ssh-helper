@@ -7,6 +7,9 @@ use crate::commands::client::types::ClientArgs;
 pub struct Cli {
     #[command(subcommand)]
     pub command: Commands,
+
+    #[arg(short, long)]
+    pub yes: Option<bool>,
 }
 
 #[derive(Subcommand, Debug)]

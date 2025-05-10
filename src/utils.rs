@@ -11,7 +11,7 @@ fn check_if_ssh_pass_is_installed() -> bool {
     output.is_ok()
 }
 
-pub fn configure_ssh() {
+pub fn configure_ssh(yes: bool) {
     let ssh_is_installed = check_if_ssh_is_installed();
 
     let info = os_info::get();
@@ -27,9 +27,12 @@ pub fn configure_ssh() {
         print!("SSH is not installed, do you want to install it? (Y/n): ");
         io::stdout().flush().unwrap();
         let mut input = String::new();
-        std::io::stdin().read_line(&mut input).unwrap();
-        let input = input.trim();
-        if (input == "Y" || input == "y" || input == "") && valid_os {
+        let mut trimmed_input: &str = "n";
+        if !yes {
+            std::io::stdin().read_line(&mut input).unwrap();
+            trimmed_input = input.trim();
+        }
+        if (yes || trimmed_input == "Y" || trimmed_input == "y" || trimmed_input == "") && valid_os {
             println!("Installing SSH...");
             println!("installing ssh");
             let output = Command::new("apt-get").arg("-y").arg("install").arg("ssh").output();
@@ -51,9 +54,12 @@ pub fn configure_ssh() {
         print!("SSH-PASS is not installed, do you want to install it? (Y/n): ");
         io::stdout().flush().unwrap();
         let mut input = String::new();
-        std::io::stdin().read_line(&mut input).unwrap();
-        let input = input.trim();
-        if (input == "Y" || input == "y" || input == "") && valid_os {
+        let mut trimmed_input: &str = "n";
+        if !yes {
+            std::io::stdin().read_line(&mut input).unwrap();
+            trimmed_input = input.trim();
+        }
+        if (yes ||trimmed_input == "Y" || trimmed_input == "y" || trimmed_input == "") && valid_os {
             println!("Installing SSH-PASS...");
             println!("installing ssh-pass");
             let output = Command::new("apt-get").arg("-y").arg("install").arg("sshpass").output();

@@ -17,7 +17,13 @@ fn main() {
 
     let cli = cli.unwrap();
 
-    configure_ssh();
+    let yes = if cli.yes.is_some() {
+        cli.yes.unwrap()
+    } else {
+        false
+    };
+
+    configure_ssh(yes);
 
     match cli.command {
         Commands::Client(client_args) => {
