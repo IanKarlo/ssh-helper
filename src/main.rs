@@ -10,7 +10,8 @@ use types::{Cli, Commands};
 fn main() {
     let cli = Cli::try_parse();
 
-    if let Err(_) = cli {
+    if let Err(e) = cli {
+        println!("{}", e);
         return;
     }
 
